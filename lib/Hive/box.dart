@@ -1,6 +1,7 @@
+
 import 'package:hive/hive.dart';
-import 'package:todo_app/Hive/model.dart';
+import 'package:todo_app/Hive/user_model.dart';
 
 class Boxes {
-  static Box<Notes> getData() => Hive.box<Notes>('notes');
+  static Box <UserModel> getData()=>Hive.box('users');
 }

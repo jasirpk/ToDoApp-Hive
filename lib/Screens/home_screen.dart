@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo_app/Hive/box.dart';
-import 'package:todo_app/Hive/model.dart';
+import 'package:todo_app/Hive/user_model.dart';
 import 'package:todo_app/Screens/update_screen.dart';
+
 
 class Home_Screen extends StatefulWidget {
   Home_Screen({super.key});
@@ -58,10 +59,10 @@ class _Home_ScreenState extends State<Home_Screen> {
                   ],
                 ),
               )),
-          body: ValueListenableBuilder<Box<Notes>>(
+          body: ValueListenableBuilder<Box<UserModel>>(
               valueListenable: Boxes.getData().listenable(),
               builder: (context, box, _) {
-                var data = box.values.toList().cast<Notes>();
+                var data = box.values.toList().cast<UserModel>();
                 if (data.isEmpty) {
                   return Center(
                     child: Lottie.asset(
@@ -79,14 +80,14 @@ class _Home_ScreenState extends State<Home_Screen> {
                             onTap: () {
                               editDialog(
                                   data[index],
-                                  data[index].title.toString(),
-                                  data[index].descritption.toString());
+                                  data[index].name.toString(),
+                                  data[index].age.toString());
 
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (ctx1) =>
-                                          Update_Screen(notes: data[index])));
+                                          Update_Screen(users: data[index])));
                             },
                             child: Card(
                               color: Colors.white,
@@ -95,13 +96,13 @@ class _Home_ScreenState extends State<Home_Screen> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: ListTile(
                                     title: Text(
-                                      data[index].title.toString(),
+                                      data[index].name.toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 18),
                                     ),
                                     subtitle: Text(
-                                        data[index].descritption.toString()),
+                                        data[index].age.toString()),
                                     trailing: IconButton(
                                       onPressed: () {
                                         showDialog(
@@ -201,9 +202,9 @@ class _Home_ScreenState extends State<Home_Screen> {
               TextButton(
                   onPressed: () {
                     if (formkey.currentState!.validate()) {
-                      final data = Notes(
-                          title: titleController.text.toString(),
-                          descritption: descriptionController.text.toString());
+                      final data = UserModel(
+                          name: titleController.text.toString(),
+                          age: descriptionController.text.toString());
                       final box = Boxes.getData();
                       box.add(data);
                       // data.save();
@@ -218,11 +219,11 @@ class _Home_ScreenState extends State<Home_Screen> {
         });
   }
 
-  void deleteItem(Notes notes) async {
-    await notes.delete();
+  void deleteItem(UserModel users) async {
+    await users.delete();
   }
 
-  Future<void> editDialog(Notes notes, String title, String description) async {
+  Future<void> editDialog(UserModel users, String title, String description) async {
     titleController.text = title;
     descriptionController.text = description;
   }
